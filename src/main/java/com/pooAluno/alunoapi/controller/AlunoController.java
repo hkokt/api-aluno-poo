@@ -16,24 +16,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/alunos")
 public class AlunoController {
 
     @Autowired
     AlunoRepository alunoRepository;
 
-    @PostMapping("/alunos")
+    @PostMapping
     public ResponseEntity<AlunoModel> insertAluno(@RequestBody @Valid AlunoDto alunoDto) {
         var alunoModel = new AlunoModel();
         BeanUtils.copyProperties(alunoDto, alunoModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(alunoModel));
     }
 
-    @GetMapping("/alunos")
+    @GetMapping
     public ResponseEntity<List<AlunoModel>> getAllAlunos() {
         return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.findAll());
     }
 
-    @GetMapping("/alunos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getAluno(@PathVariable(value = "id") UUID id) {
         Optional<AlunoModel> aluno = alunoRepository.findById(id);
         if (aluno.isEmpty()) {
@@ -42,7 +43,7 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.OK).body(aluno.get());
     }
 
-    @PutMapping("/alunos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> updateAluno(@PathVariable(value = "id") UUID id, @RequestBody @Valid AlunoDto alunoDto) {
         Optional<AlunoModel> aluno = alunoRepository.findById(id);
         if (aluno.isEmpty()) {
@@ -53,7 +54,7 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.save(alunoModel));
     }
 
-    @DeleteMapping("/alunos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAluno(@PathVariable(value = "id") UUID id) {
         Optional<AlunoModel> aluno = alunoRepository.findById(id);
         if (aluno.isEmpty()) {
