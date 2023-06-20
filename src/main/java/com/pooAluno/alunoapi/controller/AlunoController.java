@@ -22,13 +22,6 @@ public class AlunoController {
     @Autowired
     AlunoRepository alunoRepository;
 
-    @PostMapping
-    public ResponseEntity<AlunoModel> insertAluno(@RequestBody @Valid AlunoDto alunoDto) {
-        var alunoModel = new AlunoModel();
-        BeanUtils.copyProperties(alunoDto, alunoModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(alunoModel));
-    }
-
     @GetMapping
     public ResponseEntity<List<AlunoModel>> getAllAlunos() {
         return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.findAll());
@@ -41,6 +34,14 @@ public class AlunoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("aluno não registrado");
         }
         return ResponseEntity.status(HttpStatus.OK).body(aluno.get());
+    }
+
+    @PostMapping
+    public ResponseEntity<AlunoModel> insertAluno(@RequestBody @Valid AlunoDto alunoDto) {
+        var alunoModel = new AlunoModel();
+        BeanUtils.copyProperties(alunoDto, alunoModel);
+        System.out.print(alunoDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(alunoModel));
     }
 
     @PutMapping("/{id}")

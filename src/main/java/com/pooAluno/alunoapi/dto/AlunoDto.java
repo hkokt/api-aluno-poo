@@ -1,11 +1,11 @@
 package com.pooAluno.alunoapi.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigInteger;
-import java.sql.Date;
-import java.util.UUID;
+import java.time.LocalDate;
 
-public record AlunoDto(@NotNull Date nascimento, @NotBlank String ra, @NotBlank String nome) {
-}
+public record AlunoDto(
+        @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate nascimento,
+        @NotBlank String ra,
+        @NotBlank String nome) {}

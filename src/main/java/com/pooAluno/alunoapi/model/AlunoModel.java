@@ -3,7 +3,7 @@ package com.pooAluno.alunoapi.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public class AlunoModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idAluno;
-    private Date nascimento;
+    private LocalDate nascimento;
     private String ra;
     private String nome;
 
@@ -41,7 +41,7 @@ public class AlunoModel implements Serializable {
         return idAluno;
     }
 
-    public Date getNascimento() {
+    public LocalDate getNascimento() {
         return nascimento;
     }
 
@@ -57,7 +57,7 @@ public class AlunoModel implements Serializable {
         this.idAluno = idAluno;
     }
 
-    public void setNascimento(Date nascimento) {
+    public void setNascimento(LocalDate nascimento) {
         this.nascimento = nascimento;
     }
 
