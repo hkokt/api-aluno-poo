@@ -40,7 +40,6 @@ public class AlunoController {
     public ResponseEntity<AlunoModel> insertAluno(@RequestBody @Valid AlunoDto alunoDto) {
         var alunoModel = new AlunoModel();
         BeanUtils.copyProperties(alunoDto, alunoModel);
-        System.out.print(alunoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(alunoModel));
     }
 

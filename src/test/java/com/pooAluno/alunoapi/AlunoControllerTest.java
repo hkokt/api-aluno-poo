@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,13 +35,12 @@ public class AlunoControllerTest {
 
     @Test
     public void testInsertAluno() throws Exception {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = (Date) dateFormat.parse("2000-04-17");
-        AlunoDto testeAluno = new AlunoDto(date, "12345646", "teste");
+        LocalDate data = LocalDate.parse("2000-04-04");
+        AlunoDto alunoDto = new AlunoDto(data, "12534586", "teste");
         mockMvc.perform(post("/alunos")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(testeAluno)))
-                .andExpect(status().isOk());
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(alunoDto)))
+                .andExpect(status().isCreated());
     }
 
 }
