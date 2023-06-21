@@ -8,4 +8,6 @@ import java.time.LocalDate;
 public record AlunoDto(
         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate nascimento,
         @NotBlank String ra,
-        @NotBlank String nome) {}
+        @NotBlank String nome
+) {
+}

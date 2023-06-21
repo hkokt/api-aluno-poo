@@ -1,8 +1,11 @@
 package com.pooAluno.alunoapi.controller;
 
+import com.fasterxml.jackson.core.util.BufferRecyclers;
 import com.pooAluno.alunoapi.dto.AlunoDto;
+import com.pooAluno.alunoapi.model.AlunoException;
 import com.pooAluno.alunoapi.model.AlunoModel;
 import com.pooAluno.alunoapi.repository.AlunoRepository;
+import com.pooAluno.alunoapi.service.AlunoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,49 +23,49 @@ import java.util.UUID;
 public class AlunoController {
 
     @Autowired
-    AlunoRepository alunoRepository;
+    private AlunoService alunoService;
+
+    @Autowired
+    private AlunoException alunoException;
 
     @GetMapping
     public ResponseEntity<List<AlunoModel>> getAllAlunos() {
-        return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(alunoService.selectAllAlunos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getAluno(@PathVariable(value = "id") UUID id) {
-        Optional<AlunoModel> aluno = alunoRepository.findById(id);
-        if (aluno.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("aluno não registrado");
+    public ResponseEntity<Object> getAluno(@PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(alunoService.selectAluno(id));
+        } catch (Exception e) {
+            alunoException.setErro(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(alunoException);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(aluno.get());
     }
 
     @PostMapping
     public ResponseEntity<AlunoModel> insertAluno(@RequestBody @Valid AlunoDto alunoDto) {
-        var alunoModel = new AlunoModel();
-        BeanUtils.copyProperties(alunoDto, alunoModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(alunoRepository.save(alunoModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.insert(alunoDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateAluno(@PathVariable(value = "id") UUID id, @RequestBody @Valid AlunoDto alunoDto) {
-        Optional<AlunoModel> aluno = alunoRepository.findById(id);
-        if (aluno.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("aluno não registrado");
+    public ResponseEntity<Object> updateAluno(@PathVariable(value = "id") Long id, @RequestBody @Valid AlunoDto alunoDto) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(alunoService.update(id, alunoDto));
+        } catch (Exception e) {
+            alunoException.setErro(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(alunoException);
         }
-        var alunoModel = aluno.get();
-        BeanUtils.copyProperties(alunoDto, alunoModel);
-        return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.save(alunoModel));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAluno(@PathVariable(value = "id") UUID id) {
-        Optional<AlunoModel> aluno = alunoRepository.findById(id);
-        if (aluno.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("aluno não registrado");
+    public ResponseEntity<Object> deleteAluno(@PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body("{id_deletado: \"" + alunoService.delete(id) + "\"}");
+        } catch (Exception e) {
+            alunoException.setErro(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(alunoException);
         }
-        var alunoModel = aluno.get();
-        alunoRepository.delete(alunoModel);
-        return ResponseEntity.status(HttpStatus.OK).body("aluno apagado");
     }
 
 }

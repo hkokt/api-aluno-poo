@@ -30,7 +30,8 @@ public class AlunoControllerTest {
 
     @Test
     public void testGetAllAluno() throws Exception {
-        mockMvc.perform(get("/alunos")).andExpect(status().isOk());
+        mockMvc.perform(get("/alunos"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -41,6 +42,16 @@ public class AlunoControllerTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(alunoDto)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testUpdateAluno() throws Exception {
+        LocalDate data = LocalDate.parse("2000-04-04");
+        AlunoDto alunoDto = new AlunoDto(data, "12534586", "teste");
+        mockMvc.perform(post("/alunos/")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(alunoDto)))
+                .andExpect(status().isOk());
     }
 
 }
